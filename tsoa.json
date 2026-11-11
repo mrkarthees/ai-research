@@ -1,0 +1,23 @@
+{
+	"entryFile": "src/server.ts",
+	"noImplicitAdditionalProperties": "throw-on-extras",
+	"controllerPathGlobs": ["src/controllers/*.ts"],
+	"spec": {
+		"outputDirectory": "src/swagger",
+		"basePath": "/api/v1",
+		"specVersion": 3,
+		"securityDefinitions": {
+			"BearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT",
+				"description": "Enter your JWT token here"
+			}
+		}
+	},
+	"routes": {
+		"routesDir": "src/routes-tsoa",
+		"basePath": "/api/v1",
+		"authenticationModule": "./src/auth/authentication.ts"
+	}
+}

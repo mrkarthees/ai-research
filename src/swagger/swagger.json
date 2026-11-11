@@ -1,0 +1,1657 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"ResearchResponseDTO": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"company_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"research_status": {
+						"type": "string"
+					},
+					"company": {
+						"properties": {
+							"website_url": {
+								"type": "string"
+							},
+							"company_name": {
+								"type": "string"
+							},
+							"id": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"required": [
+							"website_url",
+							"company_name",
+							"id"
+						],
+						"type": "object",
+						"nullable": true
+					},
+					"started_at": {
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
+					},
+					"completed_at": {
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
+					},
+					"error_message": {
+						"type": "string",
+						"nullable": true
+					},
+					"active": {
+						"type": "boolean"
+					},
+					"created": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"created_by": {
+						"type": "string",
+						"nullable": true
+					},
+					"modified": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"modified_by": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"required": [
+					"id",
+					"company_id",
+					"research_status",
+					"started_at",
+					"completed_at",
+					"error_message",
+					"active",
+					"created",
+					"created_by",
+					"modified",
+					"modified_by"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResearchSingleResponseDTO": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ResearchResponseDTO"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"required": [
+					"success",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateResearchDTO": {
+				"properties": {
+					"company_id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"company_id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResearchListResponseDTO": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/ResearchResponseDTO"
+						},
+						"type": "array"
+					},
+					"pagination": {
+						"properties": {
+							"totalPages": {
+								"type": "number",
+								"format": "double"
+							},
+							"limit": {
+								"type": "number",
+								"format": "double"
+							},
+							"page": {
+								"type": "number",
+								"format": "double"
+							},
+							"total": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"required": [
+							"totalPages",
+							"limit",
+							"page",
+							"total"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"success",
+					"message",
+					"data",
+					"pagination"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResearchDeleteResponseDTO": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CompanySummaryDTO": {
+				"properties": {
+					"description": {
+						"type": "string",
+						"nullable": true
+					},
+					"industry": {
+						"type": "string",
+						"nullable": true
+					},
+					"business_model": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"required": [
+					"description",
+					"industry",
+					"business_model"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CompanyLocationDTO": {
+				"properties": {
+					"location_type": {
+						"type": "string",
+						"nullable": true
+					},
+					"address": {
+						"type": "string",
+						"nullable": true
+					},
+					"city": {
+						"type": "string",
+						"nullable": true
+					},
+					"state": {
+						"type": "string",
+						"nullable": true
+					},
+					"country": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"required": [
+					"location_type",
+					"address",
+					"city",
+					"state",
+					"country"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SocialMediaLinksDTO": {
+				"properties": {
+					"linkedin": {
+						"type": "string",
+						"nullable": true
+					},
+					"instagram": {
+						"type": "string",
+						"nullable": true
+					},
+					"facebook": {
+						"type": "string",
+						"nullable": true
+					},
+					"x": {
+						"type": "string",
+						"nullable": true
+					},
+					"youtube": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"required": [
+					"linkedin",
+					"instagram",
+					"facebook",
+					"x",
+					"youtube"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContactDetailsDTO": {
+				"properties": {
+					"email": {
+						"type": "string",
+						"nullable": true
+					},
+					"phone": {
+						"type": "string",
+						"nullable": true
+					},
+					"contact_page_url": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"required": [
+					"email",
+					"phone",
+					"contact_page_url"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TotalWorkingMembersDTO": {
+				"properties": {
+					"employee_count": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"employee_range": {
+						"type": "string",
+						"nullable": true
+					},
+					"is_estimate": {
+						"type": "boolean"
+					},
+					"as_of_date": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"required": [
+					"employee_count",
+					"employee_range",
+					"is_estimate",
+					"as_of_date"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ProductServiceDTO": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					},
+					"type": {
+						"type": "string",
+						"enum": [
+							"product",
+							"service",
+							"both",
+							"unknown"
+						]
+					}
+				},
+				"required": [
+					"name",
+					"description",
+					"type"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResearchResultResponseDTO": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"research_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"company_summary": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/CompanySummaryDTO"
+							}
+						],
+						"nullable": true
+					},
+					"company_locations": {
+						"items": {
+							"$ref": "#/components/schemas/CompanyLocationDTO"
+						},
+						"type": "array",
+						"nullable": true
+					},
+					"social_media_links": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/SocialMediaLinksDTO"
+							}
+						],
+						"nullable": true
+					},
+					"contact_details": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ContactDetailsDTO"
+							}
+						],
+						"nullable": true
+					},
+					"total_working_members": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/TotalWorkingMembersDTO"
+							}
+						],
+						"nullable": true
+					},
+					"career_page_url": {
+						"type": "string",
+						"nullable": true
+					},
+					"products_services": {
+						"items": {
+							"$ref": "#/components/schemas/ProductServiceDTO"
+						},
+						"type": "array",
+						"nullable": true
+					},
+					"created": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"modified": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"research_id",
+					"company_summary",
+					"company_locations",
+					"social_media_links",
+					"contact_details",
+					"total_working_members",
+					"career_page_url",
+					"products_services",
+					"created",
+					"modified"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateResearchResultDTO": {
+				"properties": {
+					"research_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"company_summary": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/CompanySummaryDTO"
+							}
+						],
+						"nullable": true
+					},
+					"company_locations": {
+						"items": {
+							"$ref": "#/components/schemas/CompanyLocationDTO"
+						},
+						"type": "array",
+						"nullable": true
+					},
+					"social_media_links": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/SocialMediaLinksDTO"
+							}
+						],
+						"nullable": true
+					},
+					"contact_details": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ContactDetailsDTO"
+							}
+						],
+						"nullable": true
+					},
+					"total_working_members": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/TotalWorkingMembersDTO"
+							}
+						],
+						"nullable": true
+					},
+					"career_page_url": {
+						"type": "string",
+						"nullable": true
+					},
+					"products_services": {
+						"items": {
+							"$ref": "#/components/schemas/ProductServiceDTO"
+						},
+						"type": "array",
+						"nullable": true
+					}
+				},
+				"required": [
+					"research_id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResearchResultEvidenceResponseDTO": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"research_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"result_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"field_name": {
+						"type": "string"
+					},
+					"source_url": {
+						"type": "string"
+					},
+					"source_title": {
+						"type": "string",
+						"nullable": true
+					},
+					"evidence_text": {
+						"type": "string"
+					},
+					"confidence": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"created": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"research_id",
+					"result_id",
+					"field_name",
+					"source_url",
+					"source_title",
+					"evidence_text",
+					"confidence",
+					"created"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CrawledSourceDTO": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"research_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"company_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"page_url": {
+						"type": "string"
+					},
+					"page_title": {
+						"type": "string",
+						"nullable": true
+					},
+					"page_type": {
+						"type": "string"
+					},
+					"meta_description": {
+						"type": "string",
+						"nullable": true
+					},
+					"extracted_text": {
+						"type": "string",
+						"nullable": true
+					},
+					"crawl_status": {
+						"type": "string"
+					},
+					"http_status": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					}
+				},
+				"required": [
+					"id",
+					"research_id",
+					"company_id",
+					"page_url",
+					"page_title",
+					"page_type",
+					"meta_description",
+					"extracted_text",
+					"crawl_status",
+					"http_status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CrawlPageResponseDTO": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"source": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/CrawledSourceDTO"
+							}
+						],
+						"nullable": true
+					},
+					"discovered_links": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"message",
+					"source",
+					"discovered_links"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CrawlPageDTO": {
+				"properties": {
+					"page_url": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"page_url"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MultiPageCrawlResponseDTO": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"research_id": {
+						"type": "number",
+						"format": "double"
+					},
+					"total_pages_attempted": {
+						"type": "number",
+						"format": "double"
+					},
+					"successful_pages": {
+						"type": "number",
+						"format": "double"
+					},
+					"failed_pages": {
+						"type": "number",
+						"format": "double"
+					},
+					"skipped_pages": {
+						"type": "number",
+						"format": "double"
+					},
+					"sources": {
+						"items": {
+							"properties": {
+								"http_status": {
+									"type": "number",
+									"format": "double",
+									"nullable": true
+								},
+								"crawl_status": {
+									"type": "string"
+								},
+								"page_type": {
+									"type": "string"
+								},
+								"page_title": {
+									"type": "string"
+								},
+								"page_url": {
+									"type": "string"
+								},
+								"id": {
+									"type": "number",
+									"format": "double"
+								}
+							},
+							"required": [
+								"http_status",
+								"crawl_status",
+								"page_type",
+								"page_title",
+								"page_url",
+								"id"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"failures": {
+						"items": {
+							"properties": {
+								"error": {
+									"type": "string"
+								},
+								"page_url": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"error",
+								"page_url"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"message",
+					"research_id",
+					"total_pages_attempted",
+					"successful_pages",
+					"failed_pages",
+					"skipped_pages",
+					"sources",
+					"failures"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CompanyResponseDTO": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"company_name": {
+						"type": "string"
+					},
+					"website_url": {
+						"type": "string"
+					},
+					"industry": {
+						"type": "string",
+						"nullable": true
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					},
+					"headquarters": {
+						"type": "string",
+						"nullable": true
+					},
+					"research_status": {
+						"type": "string"
+					},
+					"active": {
+						"type": "boolean"
+					},
+					"created": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"created_by": {
+						"type": "string",
+						"nullable": true
+					},
+					"modified": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"modified_by": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"required": [
+					"id",
+					"company_name",
+					"website_url",
+					"industry",
+					"description",
+					"headquarters",
+					"research_status",
+					"active",
+					"created",
+					"created_by",
+					"modified",
+					"modified_by"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CompanySingleResponseDTO": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"$ref": "#/components/schemas/CompanyResponseDTO"
+					}
+				},
+				"required": [
+					"success",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateCompanyDTO": {
+				"properties": {
+					"company_name": {
+						"type": "string"
+					},
+					"website_url": {
+						"type": "string"
+					},
+					"industry": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"headquarters": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"company_name",
+					"website_url"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CompanyListResponseDTO": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/CompanyResponseDTO"
+						},
+						"type": "array"
+					},
+					"pagination": {
+						"properties": {
+							"totalPages": {
+								"type": "number",
+								"format": "double"
+							},
+							"limit": {
+								"type": "number",
+								"format": "double"
+							},
+							"page": {
+								"type": "number",
+								"format": "double"
+							},
+							"total": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"required": [
+							"totalPages",
+							"limit",
+							"page",
+							"total"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"success",
+					"message",
+					"data",
+					"pagination"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateCompanyDTO": {
+				"properties": {
+					"company_name": {
+						"type": "string"
+					},
+					"website_url": {
+						"type": "string"
+					},
+					"industry": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"headquarters": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CompanyDeleteResponseDTO": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AIResearchResponseDTO": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"research_result": {
+						"$ref": "#/components/schemas/ResearchResultResponseDTO"
+					},
+					"evidences": {
+						"items": {
+							"$ref": "#/components/schemas/ResearchResultEvidenceResponseDTO"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"message",
+					"research_result",
+					"evidences"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AIResearchErrorDTO": {
+				"properties": {
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"BearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT",
+				"description": "Enter your JWT token here"
+			}
+		}
+	},
+	"info": {
+		"title": "crm",
+		"version": "1.0.0",
+		"license": {
+			"name": "UNLICENSED"
+		},
+		"contact": {}
+	},
+	"paths": {
+		"/research": {
+			"post": {
+				"operationId": "CreateResearch",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResearchSingleResponseDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Research"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateResearchDTO"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllResearch",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResearchListResponseDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Research"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "company_id",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/research/{id}": {
+			"get": {
+				"operationId": "GetResearchById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResearchSingleResponseDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Research"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteResearch",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResearchDeleteResponseDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Research"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/research/company/{companyId}": {
+			"get": {
+				"operationId": "GetResearchByCompanyId",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResearchListResponseDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Research"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "companyId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/research-results": {
+			"post": {
+				"operationId": "CreateResearchResult",
+				"responses": {
+					"201": {
+						"description": "Research result saved successfully",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResearchResultResponseDTO"
+										},
+										{
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateResearchResultDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/research-results/{researchId}": {
+			"get": {
+				"operationId": "GetResearchResult",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ResearchResultResponseDTO"
+										},
+										{
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "researchId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/research-results/{researchId}/evidences": {
+			"get": {
+				"operationId": "GetResearchResultEvidence",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResearchResultEvidenceResponseDTO"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "researchId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/health": {
+			"get": {
+				"operationId": "CheckHealth",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"success": {
+											"type": "boolean"
+										}
+									},
+									"required": [
+										"message",
+										"success"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Health"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/research/{id}/crawl": {
+			"post": {
+				"operationId": "CrawlResearchPage",
+				"responses": {
+					"201": {
+						"description": "Page crawled successfully",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CrawlPageResponseDTO"
+								}
+							}
+						}
+					}
+				},
+				"description": "Crawl a single page for a research record.",
+				"tags": [
+					"Crawler"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CrawlPageDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/research/{id}/crawl-all": {
+			"post": {
+				"operationId": "CrawlMultiplePages",
+				"responses": {
+					"200": {
+						"description": "Multi-page crawling completed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MultiPageCrawlResponseDTO"
+								}
+							}
+						}
+					}
+				},
+				"description": "Automatically crawl multiple relevant pages from a company website.",
+				"tags": [
+					"Crawler"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/companies": {
+			"post": {
+				"operationId": "CreateCompany",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CompanySingleResponseDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Companies"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateCompanyDTO"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllCompanies",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CompanyListResponseDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Companies"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "search",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/companies/{id}": {
+			"get": {
+				"operationId": "GetCompanyById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CompanySingleResponseDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Companies"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateCompany",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CompanySingleResponseDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Companies"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateCompanyDTO"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteCompany",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CompanyDeleteResponseDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Companies"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/research/{researchId}/analyze": {
+			"post": {
+				"operationId": "AnalyzeCompanyResearch",
+				"responses": {
+					"200": {
+						"description": "AI research completed successfully",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/AIResearchResponseDTO"
+										},
+										{
+											"$ref": "#/components/schemas/AIResearchErrorDTO"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "researchId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/api/v1"
+		}
+	]
+}
