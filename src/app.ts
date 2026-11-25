@@ -1,43 +1,36 @@
+import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
-
 import swaggerDocument from './swagger/swagger.json';
 import { RegisterRoutes } from './routes-tsoa/routes';
-
+import { upload } from './middlewares/upload.middleware';
+import path from 'path';
+import { errorHandler } from './middlewares/error.middleware';
 import { env } from './config/dotenv.config';
 
 const app = express();
 
-// Body parsers
-app.use(express.json({ limit: '2mb' }));
+// Middleware
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// CORS configuration
-const allowedOrigins = env.ALLOWED_ORIGINS.split(',')
-	.map((origin) => origin.trim())
-	.filter(Boolean);
-
+// CORS setup
 app.use(
 	cors({
-		origin: env.ALLOW_ALL_ORIGINS ? true : allowedOrigins,
-		credentials: true,
+		origin: env.ALLOW_ALL_ORIGINS ? '*' : false,
 	}),
 );
 
-// Health check
-app.get('/health', (req, res) => {
-	res.status(200).json({
-		success: true,
-		message: 'AI Job Research API is running',
-		environment: env.NODE_ENV,
-	});
-});
-
-// TSOA generated routes
 RegisterRoutes(app);
 
-// Swagger documentation
+app.use('/api/v1/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.get('/', (req, res) => {
+	res.send('Hello World! Server is working 🚀');
+});
+
+app.use(errorHandler);
 
 export default app;

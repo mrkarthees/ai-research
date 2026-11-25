@@ -1,149 +1,128 @@
-import { Op } from 'sequelize';
+import { Users } from '../models/user.model';
+import { Research } from '../models/research.model';
+import { ResearchResults } from '../models/researchResults.model';
 
-import { Researches } from '../models/research.model';
-import { Companies } from '../models/company.model';
-import { CreateResearchDTO } from '../dtos/research.dto';
+import { ResponseDTO } from '../dtos/base.dto';
+import { CrawlingResponse, ResearchDTO } from '../dtos/research.dto';
 
-export class ResearchService {
-	// Create a new research request
-	public async createResearch(
-		payload: CreateResearchDTO,
-		createdBy?: string,
-	): Promise<Researches> {
-		// Check whether the company exists and is active
-		const company = await Companies.findOne({
-			where: {
-				id: payload.company_id,
-				active: true,
-			},
+import { crawlWebsite } from './crawling.service';
+import { fetchCompanyFacts } from './enrichment.service';
+import { fetchJobOpenings } from './jobs.service';
+import { generateCompanyResearch } from './ai.service';
+
+// Read lazily so it works no matter when dotenv is loaded.
+const isDebug = (): boolean => process.env.DEBUG_RESEARCH === 'true';
+
+const logCrawl = (crawl: CrawlingResponse): void => {
+	console.log('\n========== CRAWLING DEBUG ==========');
+	console.log('Website:', crawl.websiteUrl);
+	console.log('Total pages:', crawl.pages.length);
+
+	crawl.pages.forEach((page, index) => {
+		console.log(`\n--- PAGE ${index + 1} ---`);
+		console.log('Title:', page.title);
+		console.log('URL:', page.url);
+		console.log('Rendered with browser:', page.renderedWithBrowser);
+		console.log('Content length:', page.content.length);
+		console.log('Emails:', page.emails);
+		console.log('Phones:', page.phoneNumbers);
+		console.log('Content preview:', page.content.slice(0, 500));
+	});
+
+	console.log('====================================\n');
+};
+
+export const createResearch = async (
+	userId: number,
+	researchPayload: ResearchDTO,
+): Promise<ResponseDTO> => {
+	let research: Research | null = null;
+
+	try {
+		// 1. Verify the authenticated user.
+		const user = await Users.findOne({
+			where: { id: userId, active: true },
 		});
 
-		if (!company) {
-			throw new Error('Company not found or inactive');
+		if (!user) {
+			return {
+				success: false,
+				message: 'User not found or account is inactive',
+			};
 		}
 
-		// Prevent another pending or processing research for the same company
-		const existingResearch = await Researches.findOne({
-			where: {
-				company_id: payload.company_id,
-				active: true,
-				research_status: {
-					[Op.in]: ['pending', 'processing'],
-				},
-			},
+		// 2. Save the research request.
+		research = await Research.create({
+			user_id: userId,
+			search_url: researchPayload.websiteUrl,
+			active: true,
+			created: new Date(),
+			created_by: userId,
+			modified: null,
+			modified_by: null,
 		});
 
-		if (existingResearch) {
-			throw new Error(
-				'Research is already pending or processing for this company',
-			);
+		// 3. Crawl the website.
+		const crawl = await crawlWebsite(researchPayload.websiteUrl);
+
+		if (isDebug()) logCrawl(crawl);
+
+		// 4. Verified facts (Wikidata) and real job openings (hiring platform
+		//    APIs) do not depend on each other, so run them together.
+		//    Neither one throws.
+		const [facts, jobs] = await Promise.all([
+			fetchCompanyFacts(crawl.pages),
+			fetchJobOpenings(crawl.pages),
+		]);
+
+		if (isDebug()) {
+			console.log('Verified company facts:', facts);
+			console.log('Job openings found:', jobs.length);
 		}
 
-		return await Researches.create({
-			company_id: payload.company_id,
-			research_status: 'pending',
+		// 5. One AI call, checked against the crawled text.
+		const aiResult = await generateCompanyResearch(crawl.pages, facts);
+
+		// 6. Save the result.
+		const savedResult = await ResearchResults.create({
+			research_id: research.id,
+			summary: aiResult.summary,
+			industry: aiResult.industry,
+			services: aiResult.services,
+			employee_count: aiResult.employee_count,
+			office_locations: aiResult.office_locations,
+			contact_details: aiResult.contact_details,
+			careers_url: aiResult.careers_url,
+			job_opportunities: jobs,
+			sources: aiResult.sources,
 			active: true,
-			created_by: createdBy || 'system',
-			modified_by: createdBy || 'system',
+			created: new Date(),
+			created_by: userId,
+			modified: null,
+			modified_by: null,
 		});
-	}
 
-	// Get all research records with pagination
-	public async getAllResearch(
-		page: number,
-		limit: number,
-		search?: number,
-	): Promise<{ rows: Researches[]; count: number }> {
-		const offset = (page - 1) * limit;
-
-		const whereCondition: any = {
-			active: true,
+		// 7. Return the complete research result.
+		return {
+			success: true,
+			message: 'Company research completed successfully',
+			data: {
+				researchId: research.id,
+				websiteUrl: research.search_url,
+				result: savedResult,
+			},
 		};
-
-		if (search) {
-			whereCondition.company_id = search;
+	} catch (error: any) {
+		// Do not leave an "active" research row without a result.
+		if (research) {
+			await research
+				.update({ active: false, modified: new Date(), modified_by: userId })
+				.catch(() => {});
 		}
 
-		return await Researches.findAndCountAll({
-			where: whereCondition,
-			include: [
-				{
-					model: Companies,
-					attributes: ['id', 'company_name', 'website_url'],
-				},
-			],
-			order: [['id', 'DESC']],
-			limit,
-			offset,
-			distinct: true,
-		});
+		return {
+			success: false,
+			message: error?.message || 'Company research failed',
+		};
 	}
-
-	// Get research by ID
-	public async getResearchById(id: number): Promise<Researches | null> {
-		return await Researches.findOne({
-			where: {
-				id,
-				active: true,
-			},
-			include: [
-				{
-					model: Companies,
-					attributes: ['id', 'company_name', 'website_url'],
-				},
-			],
-		});
-	}
-
-	// Get research history for a company
-	public async getResearchByCompanyId(
-		companyId: number,
-		page: number,
-		limit: number,
-	): Promise<{ rows: Researches[]; count: number }> {
-		const offset = (page - 1) * limit;
-
-		return await Researches.findAndCountAll({
-			where: {
-				company_id: companyId,
-				active: true,
-			},
-			include: [
-				{
-					model: Companies,
-					attributes: ['id', 'company_name', 'website_url'],
-					where: { active: true },
-				},
-			],
-			order: [['id', 'DESC']],
-			limit,
-			offset,
-			distinct: true,
-		});
-	}
-
-	// Soft delete research record
-	public async deleteResearch(
-		id: number,
-		modifiedBy?: string,
-	): Promise<boolean> {
-		const research = await Researches.findOne({
-			where: {
-				id,
-				active: true,
-			},
-		});
-
-		if (!research) {
-			return false;
-		}
-
-		await research.update({
-			active: false,
-			modified: new Date(),
-			modified_by: modifiedBy || 'system',
-		});
-
-		return true;
-	}
-}
+};

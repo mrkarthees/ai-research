@@ -1,31 +1,27 @@
 import 'reflect-metadata';
-
+import dotenv from 'dotenv';
 import http from 'http';
 
 import app from './app';
-import { connectDB, sequelize } from './config/db.config';
-import { env } from './config/dotenv.config';
+import { sequelize } from './config/db.config';
 
-const startServer = async (): Promise<void> => {
+dotenv.config();
+
+const PORT = Number(process.env.PORT) || 3000;
+
+const startServer = async () => {
 	try {
-		// Connect to MySQL
-		await connectDB();
 		await sequelize.sync();
-		console.log('✅ Database models synchronized');
+		console.log('✅ Database synced');
 
-		// Start HTTP server
 		const server = http.createServer(app);
 
-		server.listen(env.PORT, () => {
-			console.log('-----------------------------------');
-			console.log('🚀 AI Job Research API Started');
-			console.log(`🌐 Server: http://localhost:${env.PORT}`);
-			console.log(`📘 Swagger: http://localhost:${env.PORT}/api-docs`);
-			console.log(`❤️ Health: http://localhost:${env.PORT}/health`);
-			console.log('-----------------------------------');
+		server.listen(PORT, () => {
+			console.log(`🚀 Server running at http://localhost:${PORT}`);
+			console.log(`📘 Swagger at http://localhost:${PORT}/api-docs`);
 		});
-	} catch (error) {
-		console.error('❌ Failed to start server:', error);
+	} catch (err) {
+		console.error('❌ Failed to start server', err);
 		process.exit(1);
 	}
 };

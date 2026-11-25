@@ -3,15 +3,19 @@ import {
 	Column,
 	Model,
 	DataType,
-	Default,
 	ForeignKey,
 	BelongsTo,
+	HasMany,
 } from 'sequelize-typescript';
 
-import { Companies } from './company.model';
+import { Users } from './user.model';
+import { ResearchResults } from './researchResults.model';
 
-@Table({ tableName: 'company_researches', timestamps: false })
-export class Researches extends Model {
+@Table({
+	tableName: 'research',
+	timestamps: false,
+})
+export class Research extends Model {
 	@Column({
 		type: DataType.INTEGER,
 		primaryKey: true,
@@ -19,57 +23,56 @@ export class Researches extends Model {
 	})
 	id!: number;
 
-	@ForeignKey(() => Companies)
+	@ForeignKey(() => Users)
 	@Column({
 		type: DataType.INTEGER,
 		allowNull: false,
-		field: 'company_id',
 	})
-	company_id!: number;
+	user_id!: number;
 
-	@BelongsTo(() => Companies)
-	company?: Companies;
-
-	@Default('pending')
 	@Column({
-		type: DataType.ENUM('pending', 'processing', 'completed', 'failed'),
+		type: DataType.STRING(500),
 		allowNull: false,
 	})
-	research_status!: string;
+	search_url!: string;
 
 	@Column({
-		type: DataType.DATE,
-		allowNull: true,
+		type: DataType.BOOLEAN,
+		defaultValue: true,
+		allowNull: false,
 	})
-	started_at?: Date;
-
-	@Column({
-		type: DataType.DATE,
-		allowNull: true,
-	})
-	completed_at?: Date;
-
-	@Column({
-		type: DataType.TEXT,
-		allowNull: true,
-	})
-	error_message?: string;
-
-	@Default(true)
-	@Column({ type: DataType.BOOLEAN, allowNull: false })
 	active!: boolean;
 
-	@Default(DataType.NOW)
-	@Column({ type: DataType.DATE, field: 'created' })
+	@Column({
+		type: DataType.DATE,
+		defaultValue: DataType.NOW,
+		allowNull: false,
+	})
 	created!: Date;
 
-	@Column(DataType.STRING(50))
-	created_by?: string;
+	@Column({
+		type: DataType.INTEGER,
+		allowNull: true,
+	})
+	created_by?: number;
 
-	@Default(DataType.NOW)
-	@Column({ type: DataType.DATE, field: 'modified' })
-	modified!: Date;
+	@Column({
+		type: DataType.DATE,
+		allowNull: true,
+	})
+	modified?: Date;
 
-	@Column(DataType.STRING(50))
-	modified_by?: string;
+	@Column({
+		type: DataType.INTEGER,
+		allowNull: true,
+	})
+	modified_by?: number;
+
+	// Relationship: Research belongs to User
+	@BelongsTo(() => Users)
+	user!: Users;
+
+	// Relationship: Research has multiple results
+	@HasMany(() => ResearchResults)
+	results!: ResearchResults[];
 }

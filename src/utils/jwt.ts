@@ -1,10 +1,8 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export interface AccessPayload extends JwtPayload {
-	userId: number;
-	tenantId: number;
-	organizationId: number;
-	role: number;
+	id: number;
+	email: string;
 }
 
 export async function generateAccessToken(

@@ -1,25 +1,34 @@
 import { Sequelize } from 'sequelize-typescript';
 import { env } from './dotenv.config';
-import { Companies } from '../models/company.model';
-import { Researches } from '../models/research.model';
-import { ResearchSources } from '../models/research-source.model';
-import { CompanyResearchResults } from '../models/company-research-result.model';
-import { ResearchResultEvidences } from '../models/research-result-evidence.model';
+
+import { Users } from '../models/user.model';
+import { ResearchResults } from '../models/researchResults.model';
+import { Research } from '../models/research.model';
 
 export const sequelize = new Sequelize({
 	database: env.DB_NAME,
 	username: env.DB_USER,
 	password: env.DB_PASSWORD,
 	host: env.DB_HOST,
+	port: env.DB_PORT,
 	dialect: 'mysql',
-	models: [
-		Companies,
-		Researches,
-		ResearchSources,
-		CompanyResearchResults,
-		ResearchResultEvidences,
-	],
+
+	// Enable TLS only when DB_SSL=true
+	dialectOptions: env.DB_SSL
+		? {
+				ssl: {},
+			}
+		: {},
+
+	models: [Users, Research, ResearchResults],
 	logging: false,
+
+	pool: {
+		max: 5,
+		min: 0,
+		acquire: 60000,
+		idle: 10000,
+	},
 });
 
 export const connectDB = async (): Promise<void> => {

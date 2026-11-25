@@ -1,45 +1,35 @@
-export interface CreateResearchDTO {
-	company_id: number;
+export class ResearchDTO {
+	websiteUrl!: string;
 }
 
-export interface ResearchResponseDTO {
-	id: number;
-	company_id: number;
-	research_status: string;
-	company?: {
-		id: number;
-		company_name: string;
-		website_url: string;
-	} | null;
-	started_at: Date | null;
-	completed_at: Date | null;
-	error_message: string | null;
-	active: boolean;
-	created: Date;
-	created_by: string | null;
-	modified: Date;
-	modified_by: string | null;
+export interface OrganizationData {
+	name: string | null;
+	description: string | null;
+	employeeCount: string | null;
+	addresses: string[];
+	emails: string[];
+	phones: string[];
+	sameAs: string[];
 }
 
-export interface ResearchListResponseDTO {
-	success: boolean;
-	message: string;
-	data: ResearchResponseDTO[];
-	pagination: {
-		total: number;
-		page: number;
-		limit: number;
-		totalPages: number;
-	};
+export interface CrawledPage {
+	url: string;
+	title: string;
+	description: string | null;
+	content: string;
+	footerText: string;
+	navLinks: string[];
+	socialLinks: string[];
+	careersUrl: string | null;
+	emails: string[];
+	phoneNumbers: string[];
+	addresses: string[];
+	organization: OrganizationData | null;
+	renderedWithBrowser: boolean;
 }
 
-export interface ResearchSingleResponseDTO {
-	success: boolean;
-	message: string;
-	data: ResearchResponseDTO | null;
-}
-
-export interface ResearchDeleteResponseDTO {
-	success: boolean;
-	message: string;
+export interface CrawlingResponse {
+	websiteUrl: string;
+	pages: CrawledPage[];
+	combinedContent: string;
 }

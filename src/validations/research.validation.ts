@@ -1,5 +1,11 @@
 import Joi from 'joi';
 
-export const createResearchValidation = Joi.object({
-	company_id: Joi.number().integer().positive().required(),
-}).unknown(false);
+export const researchCreateValidation = Joi.object({
+	websiteUrl: Joi.string()
+		.trim()
+		.uri({
+			scheme: ['http', 'https'],
+		})
+		.max(2048)
+		.required(),
+});
