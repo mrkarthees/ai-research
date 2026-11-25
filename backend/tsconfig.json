@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"target": "ES2020",
+		"lib": ["ES2021", "DOM"],
+		"module": "nodenext",
+		"rootDir": "./src",
+		"outDir": "./dist",
+		"strict": false,
+		"allowJs": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"moduleResolution": "nodenext",
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true
+	},
+
+	"include": ["src/**/*"],
+	"exclude": ["**/*.test.ts"]
+}

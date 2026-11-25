@@ -1,0 +1,51 @@
+{
+	"name": "crm",
+	"version": "1.0.0",
+	"main": "server.js",
+	"scripts": {
+		"dev": "npm run tsoa:gen && ts-node-dev --respawn --transpile-only src/server.ts",
+		"build": "npm run tsoa:gen && tsc",
+		"start": "node dist/server.js",
+		"tsoa:gen": "tsoa routes && tsoa spec"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "UNLICENSED",
+	"description": "",
+	"dependencies": {
+		"bcryptjs": "^3.0.2",
+		"cheerio": "^1.2.0",
+		"cookie-parser": "^1.4.7",
+		"cors": "^2.8.6",
+		"dotenv": "^17.4.2",
+		"express": "^5.2.1",
+		"ipaddr.js": "^2.5.0",
+		"joi": "^18.0.2",
+		"jsonwebtoken": "^9.0.3",
+		"moment": "^2.30.1",
+		"multer": "^2.0.2",
+		"mysql2": "^3.16.1",
+		"nodemailer": "^8.0.1",
+		"redis": "^5.12.1",
+		"reflect-metadata": "^0.2.2",
+		"sequelize": "^6.37.7",
+		"swagger-ui-express": "^5.0.1",
+		"tsoa": "^7.0.0-alpha.0"
+	},
+	"devDependencies": {
+		"@types/cookie-parser": "^1.4.10",
+		"@types/cors": "^2.8.19",
+		"@types/express": "^5.0.6",
+		"@types/joi": "^17.2.2",
+		"@types/jsonwebtoken": "^9.0.10",
+		"@types/node": "^25.0.10",
+		"@types/nodemailer": "^7.0.10",
+		"@types/redis": "^4.0.10",
+		"@types/swagger-ui-express": "^4.1.8",
+		"nodemon": "^3.1.11",
+		"sequelize-typescript": "^2.1.6",
+		"ts-node": "^10.9.2",
+		"ts-node-dev": "^2.0.0",
+		"typescript": "^5.9.3"
+	}
+}
